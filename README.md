@@ -1,64 +1,76 @@
-# Daira - Simulador de Plazo Fijo (Reto Técnico)
+# Daira - Simulador de Plazo Fijo Evolutivo
 
-Este proyecto es la solución al reto técnico para la construcción de una aplicación funcional que permite a los usuarios proyectar las ganancias de un plazo fijo.
+Este proyecto es una plataforma de simulación financiera avanzada que permite proyectar ganancias de plazos fijos, destacándose por su motor de diseño dual que permite viajar en el tiempo entre dos eras del diseño web.
 
-## 🚀 Características Principales
+## 🌟 Características Destacadas
 
-1. **Simulación de Inversión**: 
-   - Cálculo del plazo fijo ingresando Monto a Invertir (Mínimo $1.000).
-   - Plazo de días parametrizable (Mínimo 30 días).
-   - Tasa Nominal Anual (TNA) máxima de 50%.
-   - Cálculos en tiempo real consumiendo la API proporcionada.
-   
-2. **Historial de Simulaciones**:
-   - Visualización de las últimas 20 consultas procesadas a través de la API.
-   
-3. **Manejo de Estados de Carga (Loading)**:
-   - Feedback visual en tiempo real para el usuario mientras las APIs resuelven las peticiones (Tanto en cálculo como en la carga del historial).
+### 1. 🎭 Motor de Diseño Dual (Retro vs Moderno)
+La aplicación implementa un sistema de temas dinámico que permite al usuario alternar entre:
+- **Modo Retro (Web 1.0)**: Una estética nostálgica inspirada en la banca de principios de los 2000. Compacta, de alto contraste y fiel a la experiencia de usuario de la época.
+- **Modo Premium Fintech**: Un diseño moderno de última generación basado en **Glassmorphism**, con gradientes suaves, tipografía *Inter* y una experiencia de usuario fluida y aireada.
 
-4. **Interfaz UI/UX Premium**:
-   - Diseño moderno basado en **Glassmorphism**.
-   - Colores oscuros de alto contraste con acentos esmeralda (esquema clásico Fintech).
-   - Tipografía adaptada (*Inter* para fluidez de lectura y *Roboto Mono* para precisión de lectura numérica).
-   - Formateo automático de precisión monetaria de 2 decimales para la moneda argentina utilizando la API de Internacionalización (`Intl.NumberFormat`).
+### 2. ⚡ Simulación de Inversión en Tiempo Real
+- **Cálculos Precisos**: Validación de montos (mín. $1.000), plazos (mín. 30 días) y TNA (máx. 50%).
+- **Integración con API**: Procesamiento asíncrono de simulaciones mediante consumo de webhooks.
+- **Formateo Internacional**: Uso de `Intl.NumberFormat` para garantizar precisión monetaria de 2 decimales para la moneda argentina.
 
-## 🛠️ Tecnologías y Herramientas
+### 3. 📜 Historial de Consultas
+- Persistencia visual de las últimas 20 simulaciones procesadas.
+- Carga asíncrona optimizada con estados de carga detallados.
 
-- **Framework Front-End**: Svelte 5 (con Vite).
-- **Estilos**: Vanilla CSS (CSS3) puro sin frameworks, aprovechando variables CSS para escalabilidad, *Grid* y *Flexbox*.
-- **Gestor de Paquetes**: npm.
-- **Asincronismo**: Fetch API para el consumo de webhooks externos.
+### 4. 🚀 Experiencia de Usuario (UX)
+- **Saltos Temporales**: Animaciones de transición y "skeleton loaders" que simulan la evolución tecnológica de la plataforma.
+- **Feedback Inmediato**: Manejo de estados de carga (*loading states*) tanto en el formulario como en el historial para evitar incertidumbre.
 
-## ⚙️ Instalación y Configuración Local
+## 🛠️ Stack Tecnológico
 
-1. Clona el repositorio:
+- **Framework**: [Svelte 5](https://svelte.dev/) - Utilizando el nuevo sistema de **Runes** (`$state`, `$props`, `$effect`) para una reactividad ultra-eficiente.
+- **Herramienta de Construcción**: Vite.
+- **Arquitectura CSS**: Vanilla CSS modularizado. Estilos desacoplados de los componentes para mayor mantenibilidad.
+- **Gestión de Estado**: Context API de Svelte para la propagación del tema global.
+
+## 📁 Estructura del Proyecto
+
+```text
+src/
+├── lib/               # Componentes de lógica y presentación
+│   ├── HistoryTable.svelte
+│   ├── SimulatorForm.svelte
+│   ├── SimulatorResult.svelte
+│   ├── api.js         # Capa de servicios y fetch
+│   └── utils.js       # Utilidades de formateo
+├── styles/            # Arquitectura CSS modular
+│   ├── App.css
+│   ├── HistoryTable.css
+│   ├── SimulatorForm.css
+│   └── SimulatorResult.css
+├── App.svelte         # Orquestador principal y gestión de contexto
+└── main.js           # Punto de entrada
+```
+
+## ⚙️ Instalación y Configuración
+
+1. **Clonar el repositorio**:
    ```bash
    git clone https://github.com/ImaaValenzuela/pt-daira.git
    cd prueba-tecnica
    ```
 
-2. Instala las dependencias:
+2. **Instalar dependencias**:
    ```bash
    npm install
    ```
 
-3. Levanta el servidor de desarrollo:
+3. **Ejecutar en desarrollo**:
    ```bash
    npm run dev
    ```
 
-4. Abre la aplicación en tu navegador web en la dirección indicada en consola (normalmente `http://localhost:5173`).
+4. **Acceso**:
+   Abre [http://localhost:5173](http://localhost:5173) en tu navegador.
 
-## 📁 Estructura del Proyecto
+## 📝 Notas de Implementación
 
-El código fuente principal se encuentra en la carpeta `src`:
-- `src/App.svelte`: Archivo base y layout principal de la UI.
-- `src/app.css`: Variables globales, diseño Glassmorphism, y animaciones.
-- `src/lib/SimulatorForm.svelte`: Componente encargado del formulario, validaciones de los inputs y envío asíncrono (POST).
-- `src/lib/SimulatorResult.svelte`: Componente encargado de la presentación visual de los resultados devueltos por el POST.
-- `src/lib/HistoryTable.svelte`: Componente encargado de la consulta asíncrona GET y tabulación del historial de las simulaciones.
-- `src/lib/utils.js`: Funciones de utilidad auxiliares compartidas, tales como el formateador de monedas y porcentajes.
-
-## 📝 Notas de Desarrollo
-- Se optó por Svelte 5 ya que la plantilla lo predeterminaba en su última versión, haciendo uso de runas (`$state`, `$props`) para lograr la máxima reactividad que se exige en los criterios de evaluación.
-- Todo el manejo monetario ha sido diseñado para nunca perder de vista la precisión en las centésimas, exigencia clave de todo sistema financiero moderno.
+- Se ha priorizado la **precisión financiera**, asegurando que todos los cálculos de intereses y montos totales mantengan la integridad de los datos en todas las capas de la aplicación.
+- El refactor hacia **Svelte 5** permite una sintaxis más limpia y un rendimiento superior al evitar el overhead de las suscripciones manuales a stores en casos de estado local complejo.
+- La **separación de intereses** en el CSS permite escalar el diseño de ambos temas (Retro y Moderno) de forma independiente sin generar colisiones de selectores.
