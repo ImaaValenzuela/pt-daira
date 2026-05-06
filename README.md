@@ -33,7 +33,7 @@ Este proyecto es la solución al reto técnico para la construcción de una apli
 
 1. Clona el repositorio:
    ```bash
-   git clone <url-de-tu-repositorio>
+   git clone https://github.com/ImaaValenzuela/pt-daira.git
    cd prueba-tecnica
    ```
 
