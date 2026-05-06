@@ -1,0 +1,139 @@
+.result-grid {
+  display: table;
+  width: 100%;
+  border: 1px solid #cccccc;
+  background: #ffffff;
+}
+
+.result-row {
+  display: table-row;
+}
+
+.result-cell {
+  display: table-cell;
+  padding: 4px 8px;
+  border-bottom: 1px solid #eeeeee;
+}
+
+.result-cell.label {
+  font-weight: bold;
+  background-color: #f0f0f0;
+  width: 40%;
+  border-right: 1px solid #cccccc;
+}
+
+.result-cell.value {
+  text-align: right;
+  color: #000000;
+}
+
+.result-total {
+  background-color: #FFFFCC;
+  border: 1px solid #FFCC00;
+  padding: 8px;
+  margin-top: 10px;
+  text-align: center;
+}
+
+.result-total .label {
+  font-weight: bold;
+}
+
+.result-total .value {
+  color: var(--danger);
+  font-size: 14px;
+  font-weight: bold;
+}
+
+body.theme-modern .result-grid {
+  border: none;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+body.theme-modern .result-cell {
+  padding: 14px 16px;
+  border-bottom: 1px solid #F3F4F6;
+}
+
+body.theme-modern .result-cell.label {
+  background-color: #F9FAFB;
+  border-right: none;
+  color: #6B7280;
+  font-weight: 500;
+}
+
+body.theme-modern .result-cell.value {
+  font-weight: 600;
+}
+
+body.theme-modern .result-total {
+  border: none;
+  border-radius: 16px;
+  background-color: rgba(116, 172, 223, 0.05);
+  padding: 24px;
+  color: var(--primary);
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+body.theme-modern .result-total .label {
+  color: #6B7280;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+body.theme-modern .result-total .value {
+  color: var(--primary);
+  font-size: 36px;
+  font-weight: 800;
+  letter-spacing: -1px;
+}
+
+.modern-progress-bar {
+  width: 100%;
+  height: 12px;
+  background-color: #E5E7EB;
+  border-radius: 6px;
+  overflow: hidden;
+  display: flex;
+  margin-top: 12px;
+  margin-bottom: 24px;
+}
+
+.modern-progress-capital {
+  background-color: var(--primary);
+  height: 100%;
+  transition: width 1s cubic-bezier(0.1, 0.7, 1.0, 0.1);
+}
+
+.modern-progress-interest {
+  background-color: #10B981;
+  height: 100%;
+  transition: width 1s cubic-bezier(0.1, 0.7, 1.0, 0.1);
+}
+
+.modern-legend {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  font-size: 12px;
+  color: #6B7280;
+  margin-bottom: 16px;
+}
+
+.modern-legend span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}

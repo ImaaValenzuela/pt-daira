@@ -1,89 +1,135 @@
 <script>
-  import svelteLogo from './assets/svelte.svg'
-  import viteLogo from './assets/vite.svg'
-  import heroImg from './assets/hero.png'
-  import Counter from './lib/Counter.svelte'
+  import './styles/App.css';
+  import { onMount, setContext } from "svelte";
+  import SimulatorForm from "./lib/SimulatorForm.svelte";
+  import SimulatorResult from "./lib/SimulatorResult.svelte";
+  import HistoryTable from "./lib/HistoryTable.svelte";
+
+  /** @type {{ capital: number, interes_ganado: number, monto_total: number } | null} */
+  let result = $state(null);
+  let showHistory = $state(false);
+  let showLoader = $state(true);
+
+  // Theme Context for child components
+  let themeState = $state({ isModern: false });
+  setContext("theme", themeState);
+
+  onMount(() => {
+    setTimeout(() => {
+      showLoader = false;
+    }, 2500);
+  });
+
+  /**
+   * @param {{ capital: number, interes_ganado: number, monto_total: number }} data
+   */
+  function handleCalculate(data) {
+    result = data;
+  }
+
+  function handleReset() {
+    result = null;
+  }
+
+  function toggleHistory() {
+    showHistory = !showHistory;
+  }
+
+  function advanceTime() {
+    showLoader = true;
+    setTimeout(() => {
+      themeState.isModern = !themeState.isModern;
+      setTimeout(() => {
+        showLoader = false;
+      }, 1000);
+    }, 500);
+  }
+
+  $effect(() => {
+    if (themeState.isModern) {
+      document.body.classList.add("theme-modern");
+    } else {
+      document.body.classList.remove("theme-modern");
+    }
+  });
 </script>
 
-<section id="center">
-  <div class="hero">
-    <img src={heroImg} class="base" width="170" height="179" alt="" />
-    <img src={svelteLogo} class="framework" alt="Svelte logo" />
-    <img src={viteLogo} class="vite" alt="Vite logo" />
+{#if showLoader}
+  <div class="loader-overlay">
+    <div class="loader-box">
+      {#if !themeState.isModern}
+        <div class="loader-title">Conectando...</div>
+      {:else}
+        <h2 class="loader-title">Actualizando UI</h2>
+      {/if}
+      <div
+        style={themeState.isModern
+          ? "font-weight: 500; color: #4B5563;"
+          : "font-size: 11px;"}
+      >
+        Estableciendo conexión segura con el servidor...
+      </div>
+      <div class="loader-bar">
+        <div class="loader-progress"></div>
+      </div>
+    </div>
   </div>
-  <div>
-    <h1>Get started</h1>
-    <p>Edit <code>src/App.svelte</code> and save to test <code>HMR</code></p>
-  </div>
-  <Counter />
-</section>
+{/if}
 
-<div class="ticks"></div>
+<main id="app">
+  <div class="main-container">
+    <div class="header-banner">
+      <h1>Banco de la República Argentina</h1>
+      <p>Módulo de Simulación de Inversiones a Plazo Fijo</p>
+    </div>
 
-<section id="next-steps">
-  <div id="docs">
-    <svg class="icon" role="presentation" aria-hidden="true">
-      <use href="/icons.svg#documentation-icon"></use>
-    </svg>
-    <h2>Documentation</h2>
-    <p>Your questions, answered</p>
-    <ul>
-      <li>
-        <a href="https://vite.dev/" target="_blank" rel="noreferrer">
-          <img class="logo" src={viteLogo} alt="" />
-          Explore Vite
-        </a>
-      </li>
-      <li>
-        <a href="https://svelte.dev/" target="_blank" rel="noreferrer">
-          <img class="button-icon" src={svelteLogo} alt="" />
-          Learn more
-        </a>
-      </li>
-    </ul>
-  </div>
-  <div id="social">
-    <svg class="icon" role="presentation" aria-hidden="true">
-      <use href="/icons.svg#social-icon"></use>
-    </svg>
-    <h2>Connect with us</h2>
-    <p>Join the Vite community</p>
-    <ul>
-      <li>
-        <a href="https://github.com/vitejs/vite" target="_blank" rel="noreferrer">
-          <svg class="button-icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#github-icon"></use>
-          </svg>
-          GitHub
-        </a>
-      </li>
-      <li>
-        <a href="https://chat.vite.dev/" target="_blank" rel="noreferrer">
-          <svg class="button-icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#discord-icon"></use>
-          </svg>
-          Discord
-        </a>
-      </li>
-      <li>
-        <a href="https://x.com/vite_js" target="_blank" rel="noreferrer">
-          <svg class="button-icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#x-icon"></use>
-          </svg>
-          X.com
-        </a>
-      </li>
-      <li>
-        <a href="https://bsky.app/profile/vite.dev" target="_blank" rel="noreferrer">
-          <svg class="button-icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#bluesky-icon"></use>
-          </svg>
-          Bluesky
-        </a>
-      </li>
-    </ul>
-  </div>
-</section>
+    <div class="content-area">
+      <SimulatorForm onResult={handleCalculate} />
 
-<div class="ticks"></div>
-<section id="spacer"></section>
+      <div style="margin-top: 15px;">
+        {#if result}
+          <SimulatorResult {result} onReset={handleReset} />
+        {/if}
+      </div>
+
+      <div
+        style="margin-top: 15px; text-align: center; border-top: 1px solid #ccc; padding-top: 15px;"
+      >
+        <button class="btn btn-secondary" onclick={toggleHistory}>
+          {#if showHistory}
+            Ocultar Historial de Simulaciones
+          {:else}
+            Consultar Historial de Simulaciones
+          {/if}
+        </button>
+      </div>
+
+      {#if showHistory}
+        <div style="margin-top: 15px;">
+          <HistoryTable />
+        </div>
+      {/if}
+
+      <div
+        style="margin-top: 60px; text-align: center; border-top: 2px dashed #ccc; padding-top: 20px;"
+      >
+        <p
+          style="color: var(--text-muted); font-size: 12px; margin-bottom: 10px;"
+        >
+          {themeState.isModern
+            ? "Estás visualizando la versión moderna."
+            : "Estás visualizando la versión retro (Web 1.0)."}
+        </p>
+        <button
+          class="btn btn-primary"
+          style="background-color: var(--accent); color: #000; border: none; font-size: 14px; padding: 10px 20px; font-weight: bold; border-radius: 6px; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1);"
+          onclick={advanceTime}
+        >
+          {themeState.isModern
+            ? "Regresar al 2005"
+            : "Avanzar 20 años en el diseño"}
+        </button>
+      </div>
+    </div>
+  </div>
+</main>

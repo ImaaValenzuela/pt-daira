@@ -1,43 +1,64 @@
-# Svelte + Vite
+# Daira - Simulador de Plazo Fijo (Reto Técnico)
 
-This template should help get you started developing with Svelte in Vite.
+Este proyecto es la solución al reto técnico para la construcción de una aplicación funcional que permite a los usuarios proyectar las ganancias de un plazo fijo.
 
-## Recommended IDE Setup
+## 🚀 Características Principales
 
-[VS Code](https://code.visualstudio.com/) + [Svelte](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode).
+1. **Simulación de Inversión**: 
+   - Cálculo del plazo fijo ingresando Monto a Invertir (Mínimo $1.000).
+   - Plazo de días parametrizable (Mínimo 30 días).
+   - Tasa Nominal Anual (TNA) máxima de 50%.
+   - Cálculos en tiempo real consumiendo la API proporcionada.
+   
+2. **Historial de Simulaciones**:
+   - Visualización de las últimas 20 consultas procesadas a través de la API.
+   
+3. **Manejo de Estados de Carga (Loading)**:
+   - Feedback visual en tiempo real para el usuario mientras las APIs resuelven las peticiones (Tanto en cálculo como en la carga del historial).
 
-## Need an official Svelte framework?
+4. **Interfaz UI/UX Premium**:
+   - Diseño moderno basado en **Glassmorphism**.
+   - Colores oscuros de alto contraste con acentos esmeralda (esquema clásico Fintech).
+   - Tipografía adaptada (*Inter* para fluidez de lectura y *Roboto Mono* para precisión de lectura numérica).
+   - Formateo automático de precisión monetaria de 2 decimales para la moneda argentina utilizando la API de Internacionalización (`Intl.NumberFormat`).
 
-Check out [SvelteKit](https://github.com/sveltejs/kit#readme), which is also powered by Vite. Deploy anywhere with its serverless-first approach and adapt to various platforms, with out of the box support for TypeScript, SCSS, and Less, and easily-added support for mdsvex, GraphQL, PostCSS, Tailwind CSS, and more.
+## 🛠️ Tecnologías y Herramientas
 
-## Technical considerations
+- **Framework Front-End**: Svelte 5 (con Vite).
+- **Estilos**: Vanilla CSS (CSS3) puro sin frameworks, aprovechando variables CSS para escalabilidad, *Grid* y *Flexbox*.
+- **Gestor de Paquetes**: npm.
+- **Asincronismo**: Fetch API para el consumo de webhooks externos.
 
-**Why use this over SvelteKit?**
+## ⚙️ Instalación y Configuración Local
 
-- It brings its own routing solution which might not be preferable for some users.
-- It is first and foremost a framework that just happens to use Vite under the hood, not a Vite app.
+1. Clona el repositorio:
+   ```bash
+   git clone <url-de-tu-repositorio>
+   cd prueba-tecnica
+   ```
 
-This template contains as little as possible to get started with Vite + Svelte, while taking into account the developer experience with regards to HMR and intellisense. It demonstrates capabilities on par with the other `create-vite` templates and is a good starting point for beginners dipping their toes into a Vite + Svelte project.
+2. Instala las dependencias:
+   ```bash
+   npm install
+   ```
 
-Should you later need the extended capabilities and extensibility provided by SvelteKit, the template has been structured similarly to SvelteKit so that it is easy to migrate.
+3. Levanta el servidor de desarrollo:
+   ```bash
+   npm run dev
+   ```
 
-**Why include `.vscode/extensions.json`?**
+4. Abre la aplicación en tu navegador web en la dirección indicada en consola (normalmente `http://localhost:5173`).
 
-Other templates indirectly recommend extensions via the README, but this file allows VS Code to prompt the user to install the recommended extension upon opening the project.
+## 📁 Estructura del Proyecto
 
-**Why enable `checkJs` in the JS template?**
+El código fuente principal se encuentra en la carpeta `src`:
+- `src/App.svelte`: Archivo base y layout principal de la UI.
+- `src/app.css`: Variables globales, diseño Glassmorphism, y animaciones.
+- `src/lib/SimulatorForm.svelte`: Componente encargado del formulario, validaciones de los inputs y envío asíncrono (POST).
+- `src/lib/SimulatorResult.svelte`: Componente encargado de la presentación visual de los resultados devueltos por el POST.
+- `src/lib/HistoryTable.svelte`: Componente encargado de la consulta asíncrona GET y tabulación del historial de las simulaciones.
+- `src/lib/utils.js`: Funciones de utilidad auxiliares compartidas, tales como el formateador de monedas y porcentajes.
 
-It is likely that most cases of changing variable types in runtime are likely to be accidental, rather than deliberate. This provides advanced typechecking out of the box. Should you like to take advantage of the dynamically-typed nature of JavaScript, it is trivial to change the configuration.
-
-**Why is HMR not preserving my local component state?**
-
-HMR state preservation comes with a number of gotchas! It has been disabled by default in both `svelte-hmr` and `@sveltejs/vite-plugin-svelte` due to its often surprising behavior. You can read the details [here](https://github.com/sveltejs/svelte-hmr/tree/master/packages/svelte-hmr#preservation-of-local-state).
-
-If you have state that's important to retain within a component, consider creating an external store which would not be replaced by HMR.
-
-```js
-// store.js
-// An extremely simple external store
-import { writable } from 'svelte/store'
-export default writable(0)
-```
+## 📝 Notas de Desarrollo
+- Se optó por Svelte 5 ya que la plantilla lo predeterminaba en su última versión, haciendo uso de runas (`$state`, `$props`) para lograr la máxima reactividad que se exige en los criterios de evaluación.
+- Todo el manejo monetario ha sido diseñado para nunca perder de vista la precisión en las centésimas, exigencia clave de todo sistema financiero moderno.
