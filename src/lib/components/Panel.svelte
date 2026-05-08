@@ -8,9 +8,10 @@
 
 <style>
   .panel {
-    background-color: #d4d0c8;
-    border: 2px outset #ffffff;
-    padding: 15px;
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    background-color: var(--panel-bg);
+    border: 1px solid var(--panel-border);
+    border-radius: var(--radius);
+    padding: 24px;
+    transition: transform 0.2s ease;
   }
 </style>

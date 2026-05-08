@@ -38,7 +38,7 @@
     {label}
   </label>
   
-  <div class="input-wrapper">
+  <div class="input-wrapper" class:error={touched && error}>
     {#if prefix}
       <span class="prefix">{prefix}</span>
     {/if}
@@ -70,44 +70,71 @@
 
 <style>
   .form-group {
-    margin-bottom: 8px;
+    margin-bottom: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
   }
 
   .form-group label {
-    display: inline-block;
-    width: 160px;
-    font-weight: bold;
-    vertical-align: middle;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-muted);
+    width: auto;
   }
 
   .input-wrapper {
-    display: inline-block;
-    vertical-align: middle;
+    display: flex;
+    align-items: center;
+    background-color: #0c0e14;
+    border: 1px solid var(--panel-border);
+    border-radius: var(--radius);
+    padding: 0 16px;
+    transition: all 0.2s ease;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .input-wrapper:focus-within {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px rgba(15, 98, 254, 0.2);
   }
 
   input {
-    border: 2px inset #ffffff;
-    background-color: #ffffff;
-    padding: 2px 4px;
+    background: transparent;
+    border: none;
+    color: var(--text-main);
+    padding: 12px 0;
     font-family: var(--font-sans);
-    font-size: 11px;
-    width: 120px;
-    transition: all 0.2s;
+    font-size: 14px;
+    width: 100%;
+    outline: none;
   }
 
   input.error {
-    background-color: #ffe6e6 !important;
-    border-color: var(--danger) !important;
+    background-color: transparent !important;
+  }
+
+  .input-wrapper.error {
+    border-color: var(--danger);
   }
 
   .field-error {
     color: var(--danger);
-    font-size: 10px;
-    margin-left: 165px;
+    font-size: 12px;
+    margin-left: 0;
+    margin-top: 4px;
     display: block;
   }
 
   .prefix, .suffix {
-    font-size: 11px;
+    color: var(--text-muted);
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
   }
+
+  .prefix { margin-right: 12px; }
+  .suffix { margin-left: 12px; }
 </style>

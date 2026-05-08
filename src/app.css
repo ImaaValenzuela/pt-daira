@@ -8,6 +8,7 @@
   --success: #02b437;
   --danger: #fa4d56;
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --radius: 12px;
 }
 
 body {
