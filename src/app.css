@@ -1,23 +1,25 @@
 :root {
-  --bg-color: #E6E6E6;
-  --panel-bg: #FFFFFF;
-  --text-main: #000000;
-  --text-muted: #333333;
-  --primary: #003366;
-  --primary-light: #74ACDF;
-  --accent: #FFCC00;
-  --danger: #cc0000;
-  --font-sans: Tahoma, Verdana, Arial, sans-serif;
+  --bg-color: #020617;
+  --panel-bg: #1d2029;
+  --panel-border: #303443;
+  --text-main: #e9e7e7;
+  --text-muted: #93959a;
+  --primary: #0f62fe;
+  --success: #02b437;
+  --danger: #fa4d56;
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
 body {
   font-family: var(--font-sans);
   background-color: var(--bg-color);
   color: var(--text-main);
-  font-size: 11px;
-  line-height: 1.4;
+  font-size: 14px;
+  line-height: 1.6;
   margin: 0;
   padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* Base typography */
