@@ -1,3 +1,4 @@
+/** @param {number} value */
 export function formatCurrency(value) {
   return new Intl.NumberFormat('es-AR', {
     style: 'currency',
@@ -7,6 +8,7 @@ export function formatCurrency(value) {
   }).format(value);
 }
 
+/** @param {number} value */
 export function formatPercent(value) {
   return new Intl.NumberFormat('es-AR', {
     style: 'percent',

@@ -1,10 +1,10 @@
 <script>
-  import '../styles/HistoryTable.css';
-  import { onMount, getContext } from "svelte";
+  import { onMount } from "svelte";
   import { formatCurrency, formatPercent } from "./utils.js";
   import { fetchHistory as apiFetchHistory } from "./api.js";
+  import Button from "./components/Button.svelte";
+  import Panel from "./components/Panel.svelte";
 
-  let themeState = getContext("theme");
   /** @type {Array<{ "Capital": number, "Plazo en días": number, "TNA aplicada": number, "Intereses ganados": number, "Monto total": number }>} */
   let records = $state([]);
   let isLoading = $state(true);
@@ -46,50 +46,27 @@
   }
 </script>
 
-<div class="retro-panel">
-  <div style="margin-bottom: 10px;">
-    <h2>Archivo Histórico de Operaciones</h2>
+<Panel>
+  <div class="history-header">
+    <h2 class="history-title">Archivo Histórico de Operaciones</h2>
   </div>
 
-  <div aria-live="polite">
+  <div role="status">
     {#if isLoading}
-      {#if themeState.isModern}
-        <table class="retro-table" style="margin-top: 0;">
-          <tbody>
-            {#each Array(5) as _}
-              <tr>
-                <td class="skeleton-cell"
-                  ><div class="skeleton-row" style="width: 80%;"></div></td
-                >
-                <td class="skeleton-cell"
-                  ><div class="skeleton-row" style="width: 50%;"></div></td
-                >
-                <td class="skeleton-cell"
-                  ><div class="skeleton-row" style="width: 60%;"></div></td
-                >
-                <td class="skeleton-cell"
-                  ><div class="skeleton-row" style="width: 90%;"></div></td
-                >
-              </tr>
-            {/each}
-          </tbody>
-        </table>
-      {:else}
-        <div style="text-align: center; font-weight: bold; padding: 20px;">
-          Cargando registros... aguarde.
-        </div>
-      {/if}
+      <div class="loading-text">
+        Cargando registros... aguarde.
+      </div>
     {:else if errorMsg}
-      <div style="text-align: center; padding: 20px;">
+      <div class="error-container">
         <span class="error-text">{errorMsg}</span><br /><br />
-        <button class="btn" onclick={fetchHistory}>Reintentar conexión</button>
+        <Button onclick={fetchHistory}>Reintentar conexión</Button>
       </div>
     {:else if records.length === 0}
-      <div style="text-align: center; padding: 20px; color: #666666;">
+      <div class="empty-text">
         No hay registros disponibles en la base de datos.
       </div>
     {:else}
-      <table class="retro-table" border="1">
+      <table class="retro-table">
         <thead>
           <tr>
             <th>Capital Invertido</th>
@@ -102,13 +79,13 @@
         <tbody>
           {#each paginatedRecords as record}
             <tr>
-              <td align="right">{formatCurrency(record["Capital"])}</td>
-              <td align="center">{record["Plazo en días"]} días</td>
-              <td align="center">{formatPercent(record["TNA aplicada"])}</td>
-              <td align="right"
+              <td class="align-right">{formatCurrency(record["Capital"])}</td>
+              <td class="align-center">{record["Plazo en días"]} días</td>
+              <td class="align-center">{formatPercent(record["TNA aplicada"])}</td>
+              <td class="align-right"
                 >+{formatCurrency(record["Intereses ganados"])}</td
               >
-              <td align="right" style="font-weight: bold;"
+              <td class="align-right font-bold"
                 >{formatCurrency(record["Monto total"])}</td
               >
             </tr>
@@ -117,28 +94,98 @@
       </table>
 
       {#if totalPages > 1}
-        <div
-          class="pagination-wrapper"
-          style="text-align: center; margin-top: 15px; border-top: 1px dashed #cccccc; padding-top: 10px;"
-        >
-          <button class="btn" onclick={prevPage} disabled={currentPage === 1}>
+        <div class="pagination-wrapper">
+          <Button variant="secondary" onclick={prevPage} disabled={currentPage === 1}>
             &lt;&lt; Anterior
-          </button>
-          <span
-            class="pagination-text"
-            style="margin: 0 15px; font-weight: bold; font-size: 11px;"
-          >
+          </Button>
+          <span class="pagination-text">
             Página {currentPage} de {totalPages}
           </span>
-          <button
-            class="btn"
+          <Button variant="secondary"
             onclick={nextPage}
             disabled={currentPage === totalPages}
           >
             Siguiente &gt;&gt;
-          </button>
+          </Button>
         </div>
       {/if}
     {/if}
   </div>
-</div>
+</Panel>
+
+<style>
+  .history-header {
+    margin-bottom: 10px;
+  }
+
+  .history-title {
+    font-size: 14px;
+    margin: 0;
+  }
+
+  .loading-text, .empty-text, .error-container {
+    text-align: center;
+    padding: 20px;
+    font-weight: bold;
+    font-size: 11px;
+  }
+
+  .empty-text {
+    color: #666666;
+    font-weight: normal;
+  }
+
+  .error-text {
+    color: var(--danger);
+  }
+
+  table.retro-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    border: 1px solid #000000;
+    font-size: 11px;
+    background: #ffffff;
+  }
+
+  table.retro-table th,
+  table.retro-table td {
+    border: 1px solid #999999;
+    padding: 3px 5px;
+  }
+
+  table.retro-table th {
+    background-color: var(--primary-light);
+    color: #000000;
+    text-align: left;
+    font-weight: bold;
+  }
+
+  table.retro-table tr:nth-child(even) {
+    background-color: #F9F9F9;
+  }
+
+  table.retro-table tr:hover {
+    background-color: #FFFFCC;
+  }
+
+  .align-right { text-align: right; }
+  .align-center { text-align: center; }
+  .font-bold { font-weight: bold; }
+
+  .pagination-wrapper {
+    text-align: center; 
+    margin-top: 15px; 
+    border-top: 1px dashed #cccccc; 
+    padding-top: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+  }
+
+  .pagination-text {
+    font-weight: bold; 
+    font-size: 11px;
+  }
+</style>

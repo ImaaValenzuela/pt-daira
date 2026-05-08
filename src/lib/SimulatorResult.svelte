@@ -1,34 +1,20 @@
 <script>
-  import '../styles/SimulatorResult.css';
-  import { getContext } from 'svelte';
   import { formatCurrency, formatPercent } from './utils.js';
+  import Button from './components/Button.svelte';
+  import Panel from './components/Panel.svelte';
   
   let { result, onReset } = $props();
-  let themeState = getContext('theme');
 
   let total = $derived(result.capital_invertido + result.interes_ganado);
-  let capitalPct = $derived((result.capital_invertido / total) * 100);
-  let intPct = $derived((result.interes_ganado / total) * 100);
 </script>
 
-<div class="retro-panel" aria-live="polite">
-  <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #ccc; padding-bottom: 5px; margin-bottom: 10px;">
-    <h2 style="margin: 0; border: none;">Liquidación de Inversión</h2>
-    <button class="btn btn-secondary" onclick={onReset}>
+<Panel class="result-container" role="status">
+  <header class="result-header">
+    <h2 class="result-title">Liquidación de Inversión</h2>
+    <Button variant="secondary" onclick={onReset}>
       Nueva Consulta
-    </button>
-  </div>
-
-  {#if themeState.isModern}
-    <div class="modern-progress-bar">
-      <div class="modern-progress-capital" style="width: {capitalPct}%"></div>
-      <div class="modern-progress-interest" style="width: {intPct}%"></div>
-    </div>
-    <div class="modern-legend">
-      <span><div class="dot" style="background: var(--primary);"></div> Capital ({capitalPct.toFixed(1)}%)</span>
-      <span><div class="dot" style="background: #10B981;"></div> Intereses ({intPct.toFixed(1)}%)</span>
-    </div>
-  {/if}
+    </Button>
+  </header>
 
   <div class="result-grid">
     <div class="result-row">
@@ -56,4 +42,70 @@
     <span class="label">Monto Total a Cobrar: </span>
     <span class="value">{formatCurrency(total)}</span>
   </div>
-</div>
+</Panel>
+
+<style>
+  .result-header {
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    border-bottom: 1px solid #999; 
+    padding-bottom: 5px; 
+    margin-bottom: 15px;
+  }
+
+  .result-title {
+    margin: 0; 
+    border: none;
+    font-size: 14px;
+  }
+
+  .result-grid {
+    display: table;
+    width: 100%;
+    border: 1px solid #cccccc;
+    background: #ffffff;
+  }
+
+  .result-row {
+    display: table-row;
+  }
+
+  .result-cell {
+    display: table-cell;
+    padding: 4px 8px;
+    border-bottom: 1px solid #eeeeee;
+    font-size: 11px;
+  }
+
+  .result-cell.label {
+    font-weight: bold;
+    background-color: #f0f0f0;
+    width: 40%;
+    border-right: 1px solid #cccccc;
+  }
+
+  .result-cell.value {
+    text-align: right;
+    color: #000000;
+  }
+
+  .result-total {
+    background-color: #FFFFCC;
+    border: 1px solid #FFCC00;
+    padding: 8px;
+    margin-top: 10px;
+    text-align: center;
+  }
+
+  .result-total .label {
+    font-weight: bold;
+    font-size: 11px;
+  }
+
+  .result-total .value {
+    color: var(--danger);
+    font-size: 14px;
+    font-weight: bold;
+  }
+</style>
