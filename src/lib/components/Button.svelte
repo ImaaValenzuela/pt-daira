@@ -1,5 +1,5 @@
 <script>
-  /** 
+  /**
    * @type {{
    *  type?: "button" | "submit" | "reset",
    *  variant?: string,
@@ -8,27 +8,20 @@
    *  children: import('svelte').Snippet,
    *  style?: string,
    *  [key: string]: any
-   * }} 
+   * }}
    */
-  let { 
-    type = "button", 
-    variant = "primary", 
-    disabled = false, 
-    onclick = undefined, 
+  let {
+    type = "button",
+    variant = "primary",
+    disabled = false,
+    onclick = undefined,
     children,
     style = "",
     ...rest
   } = $props();
 </script>
 
-<button 
-  {type} 
-  class="btn btn-{variant}" 
-  {disabled} 
-  {onclick}
-  {style}
-  {...rest}
->
+<button {type} class="btn btn-{variant}" {disabled} {onclick} {style} {...rest}>
   {@render children()}
 </button>
 
@@ -69,18 +62,6 @@
   .btn-secondary:hover:not(:disabled) {
     background-color: var(--text-muted);
     color: white;
-  }
-
-  .btn-test {
-    background-color: transparent;
-    border: 1px dashed var(--text-muted);
-    color: var(--text-muted);
-    font-size: 12px;
-  }
-
-  .btn-test:hover:not(:disabled) {
-    border-color: var(--text-main);
-    color: var(--text-main);
   }
 
   .btn:active:not(:disabled) {

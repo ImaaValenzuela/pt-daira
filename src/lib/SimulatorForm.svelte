@@ -143,19 +143,9 @@
         {#if isLoading}
           Procesando...
         {:else}
-          Calcular Inversión
+          Calcular rendimiento
         {/if}
       </Button>
-
-      <div style="text-align: center; margin-top: 10px;">
-        <Button
-          variant="test"
-          onclick={handleSimulateError}
-          disabled={isLoading}
-        >
-          Simular Error
-        </Button>
-      </div>
     </div>
   </form>
 </Panel>
@@ -175,8 +165,8 @@
   }
 
   .form-actions {
-    margin-top: 15px; 
-    border-top: 1px solid #ccc; 
+    margin-top: 15px;
+    border-top: 1px solid #ccc;
     padding-top: 20px;
   }
 </style>
