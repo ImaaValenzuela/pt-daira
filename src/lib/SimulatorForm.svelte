@@ -88,85 +88,108 @@
 
 <Panel>
   <form onsubmit={handleSubmit} novalidate>
-    <h2 class="form-title">Formulario de Datos</h2>
+    <h2 class="form-title">Simulación de inversión</h2>
 
-    <InputField
-      id="capital"
-      label="Monto a invertir:"
-      prefix="$ "
-      bind:value={capitalStr}
-      oninput={handleCapitalInput}
-      onblur={() => (touched.capital = true)}
-      error={capitalError}
-      touched={touched.capital}
-      inputmode="numeric"
-    />
+    <div class="form-body">
+      <InputField
+        id="capital"
+        label="Monto ($)"
+        suffix="ARS"
+        placeholder="Ej 10,000.00"
+        bind:value={capitalStr}
+        oninput={handleCapitalInput}
+        onblur={() => (touched.capital = true)}
+        error={capitalError}
+        touched={touched.capital}
+        inputmode="numeric"
+      />
 
-    <InputField
-      id="plazo"
-      label="Plazo de inversión:"
-      suffix=" días"
-      type="number"
-      bind:value={plazo}
-      onblur={() => (touched.plazo = true)}
-      error={plazoError}
-      touched={touched.plazo}
-    />
+      <div class="input-row">
+        <InputField
+          id="plazo"
+          label="Plazo (días)"
+          type="number"
+          bind:value={plazo}
+          onblur={() => (touched.plazo = true)}
+          error={plazoError}
+          touched={touched.plazo}
+        />
 
-    <InputField
-      id="tna"
-      label="TNA Autorizada:"
-      suffix=" %"
-      type="number"
-      step="0.01"
-      bind:value={tna}
-      onblur={() => (touched.tna = true)}
-      error={tnaError}
-      touched={touched.tna}
-    />
+        <InputField
+          id="tna"
+          label="Tasa de interés anual (%)"
+          type="number"
+          step="0.01"
+          bind:value={tna}
+          onblur={() => (touched.tna = true)}
+          error={tnaError}
+          touched={touched.tna}
+        />
+      </div>
 
-    <div aria-live="polite">
-      {#if apiErrorMsg}
-        <div class="error-text" style="margin-top: 10px;">{apiErrorMsg}</div>
-      {/if}
-    </div>
-
-    <div class="form-actions">
-      <Button
-        type="submit"
-        variant="primary"
-        disabled={isLoading ||
-          (touched.capital && !!capitalError) ||
-          (touched.plazo && !!plazoError) ||
-          (touched.tna && !!tnaError)}
-      >
-        {#if isLoading}
-          Procesando...
-        {:else}
-          Calcular rendimiento
+      <div aria-live="polite">
+        {#if apiErrorMsg}
+          <div class="error-text">{apiErrorMsg}</div>
         {/if}
-      </Button>
+      </div>
+
+      <div class="form-actions">
+        <Button
+          type="submit"
+          variant="primary"
+          disabled={isLoading ||
+            (touched.capital && !!capitalError) ||
+            (touched.plazo && !!plazoError) ||
+            (touched.tna && !!tnaError)}
+        >
+          {#if isLoading}
+            Procesando...
+          {:else}
+            Calcular rendimiento
+          {/if}
+        </Button>
+      </div>
     </div>
   </form>
 </Panel>
 
 <style>
   .form-title {
-    font-size: 14px;
-    margin-top: 0;
-    margin-bottom: 15px;
-    border-bottom: 1px solid #999;
-    padding-bottom: 5px;
+    font-size: 20px;
+    font-weight: 700;
+    margin: 0 0 24px 0;
+    color: var(--text-main);
+  }
+
+  .form-body {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .input-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
   }
 
   .error-text {
     color: var(--danger);
-    font-weight: bold;
+    font-size: 13px;
+    font-weight: 600;
+    background-color: rgba(250, 77, 86, 0.1);
+    padding: 12px;
+    border-radius: var(--radius);
+    border: 1px solid var(--danger);
   }
 
   .form-actions {
-    margin-top: 15px;
-    border-top: 1px solid #ccc;
-    padding-top: 20px;
+    margin-top: 8px;
+  }
+
+  @media (max-width: 640px) {
+    .input-row {
+      grid-template-columns: 1fr;
+    }
   }
 </style>

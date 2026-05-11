@@ -47,66 +47,65 @@
 </script>
 
 <Panel>
-  <div class="history-header">
-    <h2 class="history-title">Archivo Histórico de Operaciones</h2>
-  </div>
-
   <div role="status">
     {#if isLoading}
-      <div class="loading-text">
-        Cargando registros... aguarde.
+      <div class="status-container">
+        <div class="loader-spinner"></div>
+        <p class="loading-text">Cargando registros...</p>
       </div>
     {:else if errorMsg}
-      <div class="error-container">
-        <span class="error-text">{errorMsg}</span><br /><br />
+      <div class="status-container">
+        <span class="error-text">{errorMsg}</span>
         <Button onclick={fetchHistory}>Reintentar conexión</Button>
       </div>
     {:else if records.length === 0}
-      <div class="empty-text">
-        No hay registros disponibles en la base de datos.
+      <div class="status-container">
+        <p class="empty-text">No hay registros disponibles en la base de datos.</p>
       </div>
     {:else}
-      <table class="retro-table">
-        <thead>
-          <tr>
-            <th>Capital Invertido</th>
-            <th>Plazo</th>
-            <th>T.N.A.</th>
-            <th>Intereses Ganados</th>
-            <th>Monto Total</th>
-          </tr>
-        </thead>
-        <tbody>
-          {#each paginatedRecords as record}
+      <div class="table-container">
+        <table class="modern-table">
+          <thead>
             <tr>
-              <td class="align-right">{formatCurrency(record["Capital"])}</td>
-              <td class="align-center">{record["Plazo en días"]} días</td>
-              <td class="align-center">{formatPercent(record["TNA aplicada"])}</td>
-              <td class="align-right"
-                >+{formatCurrency(record["Intereses ganados"])}</td
-              >
-              <td class="align-right font-bold"
-                >{formatCurrency(record["Monto total"])}</td
-              >
+              <th>Capital Invertido</th>
+              <th>Plazo</th>
+              <th>T.N.A. Applied</th>
+              <th class="align-right">Intereses Ganados</th>
+              <th class="align-right">Monto Total</th>
             </tr>
-          {/each}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {#each paginatedRecords as record}
+              <tr>
+                <td>{formatCurrency(record["Capital"])}</td>
+                <td>{record["Plazo en días"]} días</td>
+                <td>{formatPercent(record["TNA aplicada"])}</td>
+                <td class="align-right success"
+                  >+{formatCurrency(record["Intereses ganados"])}</td
+                >
+                <td class="align-right font-bold"
+                  >{formatCurrency(record["Monto total"])}</td
+                >
+              </tr>
+            {/each}
+          </tbody>
+        </table>
+      </div>
 
       {#if totalPages > 1}
         <div class="pagination-wrapper">
-          <Button variant="secondary" onclick={prevPage} disabled={currentPage === 1}>
-            &lt;&lt; Anterior
-          </Button>
+          <button class="pagination-arrow" onclick={prevPage} disabled={currentPage === 1}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          </button>
           <span class="pagination-text">
             Página {currentPage} de {totalPages}
           </span>
-          <Button variant="secondary"
+          <button class="pagination-arrow"
             onclick={nextPage}
             disabled={currentPage === totalPages}
           >
-            Siguiente &gt;&gt;
-          </Button>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </button>
         </div>
       {/if}
     {/if}
@@ -114,78 +113,113 @@
 </Panel>
 
 <style>
-  .history-header {
-    margin-bottom: 10px;
-  }
-
-  .history-title {
-    font-size: 14px;
-    margin: 0;
-  }
-
-  .loading-text, .empty-text, .error-container {
+  .status-container {
     text-align: center;
-    padding: 20px;
-    font-weight: bold;
-    font-size: 11px;
+    padding: 60px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
   }
 
-  .empty-text {
-    color: #666666;
-    font-weight: normal;
+  .loader-spinner {
+    width: 32px;
+    height: 32px;
+    border: 3px solid var(--panel-border);
+    border-top-color: var(--primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  .loading-text, .empty-text {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin: 0;
   }
 
   .error-text {
     color: var(--danger);
+    font-weight: 600;
   }
 
-  table.retro-table {
+  .table-container {
+    margin: 0 -24px; /* Counteract Panel padding for full-bleed feel */
+    overflow-x: auto;
+  }
+
+  table.modern-table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 10px;
-    border: 1px solid #000000;
-    font-size: 11px;
-    background: #ffffff;
+    font-size: 14px;
   }
 
-  table.retro-table th,
-  table.retro-table td {
-    border: 1px solid #999999;
-    padding: 3px 5px;
-  }
-
-  table.retro-table th {
-    background-color: var(--primary-light);
-    color: #000000;
+  th {
+    padding: 16px 24px;
     text-align: left;
-    font-weight: bold;
+    color: var(--text-muted);
+    font-size: 13px;
+    font-weight: 600;
+    border-bottom: 1px solid var(--panel-border);
+    white-space: nowrap;
   }
 
-  table.retro-table tr:nth-child(even) {
-    background-color: #F9F9F9;
+  td {
+    padding: 16px 24px;
+    color: var(--text-main);
+    border-bottom: 1px solid var(--panel-border);
+    white-space: nowrap;
   }
 
-  table.retro-table tr:hover {
-    background-color: #FFFFCC;
+  tr:last-child td {
+    border-bottom: none;
+  }
+
+  tr:hover td {
+    background-color: rgba(255, 255, 255, 0.02);
   }
 
   .align-right { text-align: right; }
-  .align-center { text-align: center; }
-  .font-bold { font-weight: bold; }
+  .font-bold { font-weight: 700; }
+  .success { color: var(--success); }
 
   .pagination-wrapper {
-    text-align: center; 
-    margin-top: 15px; 
-    border-top: 1px dashed #cccccc; 
-    padding-top: 10px;
+    margin-top: 24px;
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 15px;
+    gap: 20px;
+  }
+
+  .pagination-arrow {
+    background: var(--panel-border);
+    border: none;
+    color: var(--text-main);
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .pagination-arrow:hover:not(:disabled) {
+    background: var(--text-muted);
+  }
+
+  .pagination-arrow:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
   }
 
   .pagination-text {
-    font-weight: bold; 
-    font-size: 11px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
   }
 </style>
